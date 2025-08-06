@@ -44,12 +44,16 @@ if prompt:
         {"role": m["role"], "content": m["content"]}
         for m in st.session_state.messages
     ]
-    
-        # Call OpenAI API with the updated messages
-        stream = client.chat.completions.create(
-        model=st.session_state["openai_model"],
-        messages=messages_for_api,  # Use the modified messages list
-        stream=True,
-    )
-        response = st.write_stream(stream)
+        
+        try:
+            # Call OpenAI API with the updated messages
+            stream = client.chat.completions.create(
+            model=st.session_state["openai_model"],
+            messages=messages_for_api,  # Use the modified messages list
+            stream=True,
+        )
+            response = st.write_stream(stream)
+        except Exception as e:
+            st.error(f"Error: {e}")
+            response = "抱歉，发生错误。请稍后再试。"
         st.session_state.messages.append({"role": "assistant", "content": response})
