@@ -29,13 +29,13 @@ if prompt:
     with st.chat_message("assistant"):
         # Define the system prompt (modify as needed)
         filename = "prompt_text.txt"  # Replace with your text file name
-        current_dir = os.path.dirname(os.path.abspath(__file__))
-        file_path = os.path.join(current_dir, filename)
+        # current_dir = os.path.dirname(os.path.abspath(__file__))
+        file_path = os.path.join(filename)
         with open(file_path, "r", encoding="utf-8") as file:
             system_prompt_content = file.read()
 
         system_prompt = {
-            "role": "你是数据问答助手, 只回答与数据相关的问题",
+            "role": "system",
             "content": system_prompt_content
         }
 
