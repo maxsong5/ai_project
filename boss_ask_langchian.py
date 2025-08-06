@@ -1,7 +1,7 @@
 from openai import OpenAI
 import streamlit as st
 
-st.title("ChatGPT-like clone")
+st.title("Boss-Ask-LangChain")
 
 openai_api_key = st.sidebar.text_input("OpenAI API Key", type="password")
 
@@ -17,10 +17,16 @@ for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
 
-if prompt := st.chat_input("What is up?"):
-    st.session_state.messages.append({"role": "user", "content": prompt})
-    with st.chat_message("user"):
-        st.markdown(prompt)
+prompt = st.chat_input("Say something and/or attach an image"
+                       ,accept_file=True
+                       ,file_type=["jpg", "jpeg", "png"])
+if prompt and prompt.text:
+    st.markdown(prompt.text)
+    st.session_state.messages.append({"role": "user", "content": prompt.text})
+if prompt and prompt["files"]:
+    st.image(prompt["files"][0])
+    st.session_state.messages.append({"role": "user", "content": prompt["files"][0]})
+
 
     with st.chat_message("assistant"):
         stream = client.chat.completions.create(
